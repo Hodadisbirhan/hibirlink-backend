@@ -1,16 +1,15 @@
 const transfer = require("../config/smtp");
 
 const send_email_handler = async (data) => {
-  const { from, to, subject, html } = data;
+  const { from, to, subject, html, text } = data;
   const mailOption = {
     from,
     to,
     subject,
-
+    text,
     html,
   };
   console.log(to);
-
   return new Promise((resolve, reject) => {
     transfer.sendMail(mailOption, (error, info) => {
       if (error) {
@@ -21,5 +20,8 @@ const send_email_handler = async (data) => {
     });
   });
 };
+
+
+
 
 module.exports = send_email_handler;

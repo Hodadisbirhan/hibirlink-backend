@@ -1,7 +1,8 @@
 const { Configuration, OpenAIApi } = require("openai");
 
 const configuration = new Configuration({
-  apiKey: process.env.OPEN_AI_KEY,
+  apiKey: "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",
+  //  apiKey: "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",
 });
 
 const openai = new OpenAIApi(configuration);
@@ -22,26 +23,32 @@ const service = [
   },
 ];
 const runCompletion = async (req, res) => {
-  const { request } = req.body;
-  console.log(request);
-  const chatHistory = [
-    {
-      role: "system",
-      content: `You are A Virtual Assistance. Please consider this Service that we provide ${JSON.stringify(
-        service
-      )}`,
-    },
-    ...JSON.parse(request),
-  ];
-  console.log(chatHistory);
-  const completion = await openai.createChatCompletion({
-    // model: "text-davinci-003",
-    model: "gpt-3.5-turbo",
-    messages: chatHistory,
-  });
+  try {
+    const { request } = req.body;
+    console.log(request);
+    const chatHistory = [
+      {
+        role: "system",
+        content: `You are A Virtual Assistance. Please consider this Service that we provide ${JSON.stringify(
+          service
+        )}`,
+      },
+      ...JSON.parse(request),
+    ];
+    //   console.log(chatHistory);
 
-  console.log(completion);
-  return res.json({ message: completion.data });
+    const completion = await openai.createChatCompletion({
+      //model: "text-davinci-003",
+      model: "gpt-3.5-turbo",
+      messages: chatHistory,
+    });
+
+    console.log("djshdskhdkshdkshdskhd");
+    return res.json({ message: completion.data });
+  } catch (error) {
+    console.log(error?.response);
+    return res.sendStatus(400);
+  }
 };
 
 module.exports = runCompletion;
